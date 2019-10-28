@@ -2,11 +2,12 @@ import os
 import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect,request,abort
-from flaskblog import app,db
+from flaskblog import app,db,mail
 from werkzeug.security import generate_password_hash,check_password_hash
 from flaskblog.forms import RegistrationForm, LoginForm,UpdateAccountForm,PostForm,RequestResetForm,ResetPasswordForm
 from flaskblog.models import User, Post
 from flask_login import login_user,current_user,logout_user,login_required
+from flask_mail import Message
 
 
 
@@ -158,7 +159,12 @@ def user_posts(username):
 
 # sending email
 def send_reset_email(user):
-    pass
+    token = user.get_reset_token()
+    msg = Message('Password Reset Request', sender='blog@email.com', recipients=[user.email])
+
+    msg.body = f'''To reset your blog password, visit this link: {url_for('reset_token', token=token, _external=True)}
+    If someone else is trying to scam you ignore this email and no changes will be made to your blog account'''
+    mail.send(msg)
 
 
 @app.route('/reset_password', methods=['GET','POST'])
@@ -170,7 +176,7 @@ def reset_request():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         send_reset_email(user)
-        flash('An email has been sent to reset your password')
+        flash('An email has been sent to reset your password','info')
         return redirect(url_for('login'))
     return render_template('reset_request.html',title='Reset Password',form=form)
 
@@ -185,4 +191,10 @@ def reset_token(token):
         flash('Invalid or expired token','warning')
         return redirect(url_for('reset_request'))
     form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = generate_password_hash(form.password.data)
+        user.password = hashed_password
+        db.session.commit()
+        flash('Password Updated. Login with your new password')
+        return redirect(url_for('login'))
     return render_template('reset_token.html',title='Reset Password',form=form)
