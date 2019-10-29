@@ -15,14 +15,15 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('main.home'))
     form = RegistrationForm()
+    random_quote = get_random_quote()
     if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data).decode('utf-8')
+        hashed_password = generate_password_hash(form.password.data)
         user = User(username=form.username.data, email=form.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('users.login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='Register', form=form,random_quote=random_quote)
 
 
 @users.route("/login", methods=['GET', 'POST'])
@@ -71,10 +72,11 @@ def account():
 
 @users.route("/user/<string:username>")
 def user_posts(username):
+    random_quote = get_random_quote()
     page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
     posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
-    return render_template('user_posts.html', posts=posts, user=user)
+    return render_template('user_posts.html', posts=posts, user=user,random_quote=random_quote)
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])

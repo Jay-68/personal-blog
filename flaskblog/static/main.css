@@ -19,9 +19,12 @@ h1, h2, h3, h4, h5, h6 {
 .site-header .navbar-nav .nav-link:active {
   font-weight: bolder;
 }
-.site-header{
+
+.back {
   background-image: url('bg.jpeg');
+  background-color: yellow;
 }
+
 .content-section {
   background: #ffffff;
   padding: 10px 20px;
