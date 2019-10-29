@@ -19,6 +19,8 @@ def create_app(config_class=Config):
     db.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    from .request import configure_request
+    configure_request(app)
 
     from flaskblog.users.routes import users
     from flaskblog.posts.routes import posts
