@@ -8,10 +8,6 @@ h1, h2, h3, h4, h5, h6 {
   color: #444444;
 }
 
-.bg-steel {
-  background-color: #5f788a;
-}
-
 .site-header .navbar-nav .nav-link {
   color: #cbd5db;
 }
@@ -23,7 +19,9 @@ h1, h2, h3, h4, h5, h6 {
 .site-header .navbar-nav .nav-link:active {
   font-weight: bolder;
 }
-
+.site-header{
+  background-image: url('bg.jpeg');
+}
 .content-section {
   background: #ffffff;
   padding: 10px 20px;

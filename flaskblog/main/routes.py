@@ -12,8 +12,3 @@ def home():
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     random_quote = get_random_quote()
     return render_template('home.html', posts=posts,random_quote=random_quote)
-
-
-@main.route("/about")
-def about():
-    return render_template('about.html', title='About')
