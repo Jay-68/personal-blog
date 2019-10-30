@@ -35,7 +35,7 @@ Here is a run through of how to set up the application:
     * Open your preferred browser and view the app by opening the link **http://127.0.0.1:5000/**.
 
 ## Known Bugs
-* The like ad dislike buttons functionality error.
+* No known bugs.
 
 ## Technologies Used
 * Python 3.7.4
